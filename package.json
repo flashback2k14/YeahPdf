@@ -5,7 +5,11 @@
   "license": "MIT",
   "author": "flashback2k14",
   "scripts": {
-    "deploy": "npx now --prod ."
+    "remove": "rm -rf build/",
+    "create": "mkdir build/",
+    "copy": "cp -r public build/ && cp index.html build/index.html && cp favicon.ico build/favicon.ico && cp site.webmanifest build/site.webmanifest",
+    "build": "npm run remove && npm run create && npm run copy",
+    "deploy": "npm run build && cd build/ && npx now --prod ."
   },
   "keywords": ["PDF", "data"]
 }

@@ -4,7 +4,7 @@ const cacheName = `yeah-pdf-${version}`;
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(cacheName).then((cache) => {
-      return cache.addAll([`/public`, `/index.html`]).then(() => self.skipWaiting());
+      return cache.addAll([`/`, `/index.html`]).then(() => self.skipWaiting());
     })
   );
 });
