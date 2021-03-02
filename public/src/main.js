@@ -5,6 +5,7 @@
   const dropzoneFileName = document.getElementById('dropzoneFileName');
   const formFieldsNoEntries = document.getElementById('formFieldsNoEntries');
   const formFieldsContainer = document.getElementById('formFieldsContainer');
+  const pdfFile = document.getElementById('pdfFile');
 
   let isNew = true;
 
@@ -110,9 +111,11 @@
    */
 
   const _getPdfFile = (ev) => {
-    return ev.dataTransfer.items && ev.dataTransfer.items[0].kind === 'file'
-      ? ev.dataTransfer.items[0].getAsFile()
-      : ev.dataTransfer.files[0];
+    return 'dataTransfer' in ev
+      ? ev.dataTransfer.items && ev.dataTransfer.items[0].kind === 'file'
+        ? ev.dataTransfer.items[0].getAsFile()
+        : ev.dataTransfer.files[0]
+      : ev.target.files[0];
   };
 
   const _toggleDropzone = () => {
@@ -175,16 +178,21 @@
    */
 
   const initHandler = () => {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'public/libs/pdfjs/build/pdf.worker.min.js';
+
     dropZone.addEventListener('drop', _handleDrop);
     dropZone.addEventListener('dragover', _handleDragOver);
     dropZone.addEventListener('dragleave', _handleDragLeave);
+
+    pdfFile.addEventListener('change', _handleDrop);
   };
 
   const removeHandler = () => {
     dropZone.removeEventListener('drop', _handleDrop);
     dropZone.removeEventListener('dragover', _handleDragOver);
     dropZone.removeEventListener('dragleave', _handleDragLeave);
+
+    pdfFile.removeEventListener('change', _handleDrop);
   };
 
   initHandler();

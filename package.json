@@ -1,13 +1,13 @@
 {
   "name": "yeah-pdf",
   "description": "pdf meta data viewer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "MIT",
   "author": "flashback2k14",
   "scripts": {
     "remove": "rm -rf build/",
     "create": "mkdir build/",
-    "copy": "cp -r public build/ && cp index.html build/index.html && cp favicon.ico build/favicon.ico && cp site.webmanifest build/site.webmanifest",
+    "copy": "cp -r public build/ && cp index.html build/index.html && cp favicon.ico build/favicon.ico && cp site.webmanifest build/site.webmanifest #&& cp manifest.json build/manifest.json",
     "build": "npm run remove && npm run create && npm run copy",
     "deploy": "npm run build && cd build/ && npx now --prod ."
   },
