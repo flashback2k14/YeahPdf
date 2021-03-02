@@ -18,6 +18,7 @@
     <link rel="manifest" href="/site.webmanifest" />
 
     <link rel="stylesheet" href="public/styles/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/pdfjs-dist@2.6.347/web/pdf_viewer.css" />
   </head>
   <body>
     <header>
@@ -31,8 +32,12 @@
             <p>PDF Dokument hier...</p>
           </div>
           <div class="hidden" id="dropzoneFile">
-            <h2 id="dropzoneFileName"></h2>
-            <div id="viewport"></div>
+            <div class="name-viewer_container">
+              <span class="filename" id="dropzoneFileName"></span>
+              <div class="viewer-container" id="viewerContainer">
+                <div id="viewer" class="pdfViewer"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -59,6 +64,7 @@
     </footer>
 
     <script src="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.min.js"></script>
+    <script src="https://unpkg.com/pdfjs-dist@2.6.347/web/pdf_viewer.js"></script>
     <script src="public/src/main.js"></script>
   </body>
 </html>

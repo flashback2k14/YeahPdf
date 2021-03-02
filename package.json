@@ -1,7 +1,7 @@
 {
   "name": "yeah-pdf",
   "description": "pdf meta data viewer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "author": "flashback2k14",
   "scripts": {

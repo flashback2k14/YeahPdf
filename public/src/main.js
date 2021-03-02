@@ -82,6 +82,22 @@
     formFieldsContainer.appendChild(ul);
   };
 
+  const _renderViewer = (pdf) => {
+    const container = document.getElementById('viewerContainer');
+    const eventBus = new pdfjsViewer.EventBus();
+
+    const pdfViewer = new pdfjsViewer.PDFViewer({
+      container,
+      eventBus,
+    });
+
+    eventBus.on('pagesinit', function () {
+      pdfViewer.currentScaleValue = 'page-width';
+    });
+
+    pdfViewer.setDocument(pdf);
+  };
+
   const _clearList = () => {
     const formFieldList = document.getElementById('formFieldList');
     if (formFieldList) {
@@ -92,6 +108,12 @@
   /**
    * DROPZONE
    */
+
+  const _getPdfFile = (ev) => {
+    return ev.dataTransfer.items && ev.dataTransfer.items[0].kind === 'file'
+      ? ev.dataTransfer.items[0].getAsFile()
+      : ev.dataTransfer.files[0];
+  };
 
   const _toggleDropzone = () => {
     if (!isNew) {
@@ -114,21 +136,14 @@
   const _initDropzone = (droppedFile) => {
     dropzoneFileName.innerText = droppedFile.name;
     dropZone.style.borderColor = 'blue';
-  }
+  };
 
   const _handleDrop = (ev) => {
     ev.preventDefault();
 
     _clearList();
 
-    let droppedFile;
-
-    if (ev.dataTransfer.items && ev.dataTransfer.items[0].kind === 'file') {
-      var file = ev.dataTransfer.items[0].getAsFile();
-      droppedFile = file;
-    } else {
-      droppedFile = ev.dataTransfer.files[0];
-    }
+    const droppedFile = _getPdfFile(ev);
 
     _toggleDropzone();
     _initDropzone(droppedFile);
@@ -139,6 +154,7 @@
       const pdf = await pdfjsLib.getDocument(typedarray).promise;
       const formFields = await _getPdfContent(pdf, pdf.numPages);
       _render(formFields);
+      _renderViewer(pdf);
     };
 
     fileReader.readAsArrayBuffer(droppedFile);
