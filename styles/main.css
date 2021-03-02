@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+  font-family: 'Lato', sans-serif;
+
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+}
+
+header h1 {
+  margin-left: 24px;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 60px - 48px - 16px);
+  margin: 8px;
+}
+
+main .left,
+main .right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: inherit;
+  width: calc(100vw / 2);
+}
+
+main .left .dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: calc(100vw / 2 - 36px);
+  height: calc(100vh - 60px - 48px - 16px);
+
+  border: 2px blue dashed;
+  border-radius: 4px;
+}
+
+main .left .dropzone:hover {
+  border-color: red;
+}
+
+main .right .formfields {
+  width: calc(100vw / 2 - 36px);
+  height: calc(100vh - 60px - 48px - 19px);
+
+  border: 2px lightslategray solid;
+  border-radius: 4px;
+
+  overflow: auto;
+}
+
+main .right .formfields .formfields_no-entries {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: inherit;
+  height: inherit;
+}
+
+main .right .formfields .formfields_entries {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  width: inherit;
+  height: inherit;
+}
+
+ul {
+  padding-bottom: 4px;
+}
+
+.page-list_item {
+  font-weight: 900;
+  font-size: larger;
+}
+
+.no-entry_item {
+  font-style: italic;
+  font-size: medium !important;
+  font-weight: normal !important;
+}
+
+.entry_item {
+  font-size: medium !important;
+  font-weight: normal !important;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 48px;
+}
+
+footer a {
+  margin-left: 12px;
+}
+
+.footer-anchor {
+  display: flex;
+  text-decoration: none;
+  color: var(--white-color);
+  outline: none;
+}
+.footer-anchor:hover,
+.footer-anchor:focus {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.footer-anchor:visited {
+  color: var(--white-color);
+}
+.footer-icon {
+  margin-left: 8px;
+  margin-right: 12px;
+}
+
+.active {
+  display: flex !important;
+}
+
+.hidden {
+  display: none !important;
+}

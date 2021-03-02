@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yeah! PDF</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Yeah! PDF</h1>
+    </header>
+
+    <main>
+      <section class="left">
+        <div class="dropzone" id="dropZone">
+          <div class="active" id="dropzoneInfo">
+            <p>PDF Dokument hier...</p>
+          </div>
+          <div class="hidden" id="dropzoneFile">
+            <h2 id="dropzoneFileName"></h2>
+            <div id="viewport"></div>
+          </div>
+        </div>
+      </section>
+      <section class="right">
+        <div class="formfields">
+          <div class="active formfields_no-entries" id="formFieldsNoEntries">
+            <p>Keine Daten vorhanden...</p>
+          </div>
+          <div class="hidden formfields_entries" id="formFieldsContainer"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a
+        href="https://github.com/flashback2k14/scoreboard"
+        target="_blank"
+        rel="noopener"
+        class="footer-anchor text-color"
+      >
+        <img class="footer-icon" src="public/assets/github.svg" alt="Github Icon" />
+        <span>developed by flashback2k14</span>
+      </a>
+    </footer>
+
+    <script src="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.min.js"></script>
+    <script src="src/main.js"></script>
+  </body>
+</html>
