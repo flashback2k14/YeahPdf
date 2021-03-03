@@ -30,7 +30,7 @@
       <section class="left">
         <div class="dropzone" id="dropZone">
           <div class="active" id="dropzoneInfo">
-            <input type="file" name="pdf" id="pdfFile" hidden>
+            <input type="file" name="pdf" id="pdfFile" hidden />
             <label for="pdfFile">PDF Dokument hier ablegen oder klicken...</label>
           </div>
           <div class="hidden" id="dropzoneFile">
@@ -48,14 +48,21 @@
           <div class="active formfields_no-entries" id="formFieldsNoEntries">
             <p>Keine Daten vorhanden...</p>
           </div>
-          <div class="hidden formfields_entries" id="formFieldsContainer"></div>
+          <div class="hidden formfields_entries" id="formFieldsContainer">
+            <div class="tab">
+              <button class="tablinks selected" id="defaultOpen" data-tab="simplifiedFormFields">Formfelder</button>
+              <button class="tablinks" data-tab="rawFormFields">Rohdaten</button>
+            </div>
+            <div class="tabcontent" id="simplifiedFormFields"></div>
+            <div class="tabcontent" id="rawFormFields"></div>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
       <a
-        href="https://github.com/flashback2k14/scoreboard"
+        href="https://github.com/flashback2k14/YeahPdf"
         target="_blank"
         rel="noopener"
         class="footer-anchor text-color"
