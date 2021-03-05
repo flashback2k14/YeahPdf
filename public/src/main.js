@@ -70,7 +70,18 @@
           liType.classList.add('entry_item');
 
           const liValue = document.createElement('li');
-          liValue.innerText = 'Wert: ' + (field.value ? field.value : field.buttonValue);
+          const value =
+            field.type === 'Tx'
+              ? field.value.length === 0
+                ? '-'
+                : field.value
+              : field.type === 'Btn'
+              ? field.buttonValue.length === 0
+                ? '-'
+                : field.buttonValue
+              : '-';
+
+          liValue.innerText = `Wert: ${value}`;
           liValue.classList.add('entry_item');
 
           fieldUl.appendChild(liType);
