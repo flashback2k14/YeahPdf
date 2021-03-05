@@ -9,7 +9,7 @@
     "create": "mkdir build/",
     "copy": "cp -r public build/ && cp index.html build/index.html && cp favicon.ico build/favicon.ico && cp manifest.json build/manifest.json && cp service-worker.js build/service-worker.js",
     "build": "npm run remove && npm run create && npm run copy",
-    "deploy": "npm run build && cd build/ && npx now --prod ."
+    "deploy": "npm run build && npx now --prod build/"
   },
   "keywords": ["PDF", "data"]
 }
