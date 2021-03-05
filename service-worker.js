@@ -1,10 +1,10 @@
-const version = '1.2.0';
+const version = '1.3.1';
 const cacheName = `yeah-pdf-${version}`;
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(cacheName).then((cache) => {
-      return cache.addAll([`/`, `/index.html`, `/public/libs/pdfjs`])
+      return cache.addAll([`/`, `/index.html`])
         .then(() => self.skipWaiting());
     })
   );

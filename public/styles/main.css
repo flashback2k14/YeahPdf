@@ -82,8 +82,6 @@ main .right .formfields {
 
   border: 2px lightslategray solid;
   border-radius: 4px;
-
-  overflow: auto;
 }
 
 main .right .formfields .formfields_no-entries {
@@ -97,11 +95,47 @@ main .right .formfields .formfields_no-entries {
 
 main .right .formfields .formfields_entries {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
 
   width: inherit;
   height: inherit;
+}
+
+.tab {
+  background: #eee;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.tab button {
+  background: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+.tab button:hover {
+  background: #ddd;
+}
+
+.selected {
+  background: #b1cae2 !important;
+}
+
+.tabcontent {
+  display: none;
+  overflow: auto;
+  height: inherit;
+  width: calc(100vw / 2 - 60px);
+
+  padding: 6px 12px;
+  border-top: 1px solid #ccc;
 }
 
 ul {
