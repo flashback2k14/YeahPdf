@@ -90,6 +90,7 @@
 
   const _renderRaw = (entries) => {
     const holder = document.createElement('div');
+    holder.id = 'rawFieldList';
 
     Object.values(entries).forEach((entry) => {
       if (entry.fields.length === 0) {
@@ -145,6 +146,10 @@
     const formFieldList = document.getElementById('formFieldList');
     if (formFieldList) {
       formFieldList.parentNode.removeChild(formFieldList);
+    }
+    const rawFieldList = document.getElementById('rawFieldList');
+    if (rawFieldList) {
+      rawFieldList.parentNode.removeChild(rawFieldList);
     }
   };
 
@@ -267,6 +272,6 @@
   window.addEventListener('beforeunload', removeHandler);
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('public/src/service-worker.js');
+    navigator.serviceWorker.register('/service-worker.js');
   }
 })();
