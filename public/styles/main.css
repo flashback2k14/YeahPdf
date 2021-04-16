@@ -30,36 +30,26 @@ main {
   margin: 8px;
 }
 
-.split-vertical {
-  width: calc(100vw - 26px);
-}
-
-.split-panel_top {
-  width: inherit;
-
-  border-width: 4px;
-  border-style: dashed;
-  border-radius: 0.3rem;
-  border-color: rgba(229, 231, 235, 1);
-}
-
-.split-panel_bottom {
-  width: inherit;
-}
-
 main .left,
 main .right {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: -webkit-fill-available;
+  height: inherit;
+  width: calc(100vw / 2);
 }
 
 main .left .dropzone {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: calc(100vw / 2 - 36px);
+  height: calc(100vh - 60px - 48px - 16px);
+
+  border: 2px blue dashed;
+  border-radius: 4px;
 }
 
 main .left .dropzone:hover {
@@ -81,20 +71,20 @@ main .left .name-viewer_container .filename {
 }
 
 main .left .viewer-container {
-  /* width: calc(100vw / 2 - 80px);
-  height: calc(100vh - 60px - 48px - 100px); */
-  width: 50%;
-  height: 50%;
+  width: calc(100vw / 2 - 80px);
+  height: calc(100vh - 60px - 48px - 100px);
   overflow: auto;
 }
 
-main .split-panel_bottom .formfields {
-  height: -webkit-fill-available;
+main .right .formfields {
+  width: calc(100vw / 2 - 36px);
+  height: calc(100vh - 60px - 48px - 19px);
+
   border: 2px lightslategray solid;
   border-radius: 4px;
 }
 
-main .split-panel_bottom .formfields .formfields_no-entries {
+main .right .formfields .formfields_no-entries {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,7 +93,7 @@ main .split-panel_bottom .formfields .formfields_no-entries {
   height: inherit;
 }
 
-main .split-panel_bottom .formfields .formfields_entries {
+main .right .formfields .formfields_entries {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -204,27 +194,4 @@ footer a {
 
 .hidden {
   display: none !important;
-}
-
-.split-horizontal {
-  display: flex;
-  flex-direction: row;
-  width: calc(100vw - 26px);
-  height: -webkit-fill-available;
-}
-
-.gutter {
-  background-color: #eee;
-  background-repeat: no-repeat;
-  background-position: 50%;
-}
-
-.gutter.gutter-horizontal {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
-  cursor: col-resize;
-}
-
-.gutter.gutter-vertical {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-  cursor: row-resize;
 }

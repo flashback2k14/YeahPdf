@@ -228,7 +228,7 @@
       const formFields = await _getPdfContent(pdf, pdf.numPages);
       _render(formFields);
       _renderRaw(formFields);
-      // _renderViewer(pdf);
+      _renderViewer(pdf);
       document.getElementById('defaultOpen').click();
     };
 
@@ -268,13 +268,6 @@
   /**
    * SETUP
    */
-  const initSplitter = () => {
-    Split(['#split-top', '#split-bottom'], {
-      direction: 'vertical',
-    });
-
-    Split(['#split-left', '#split-right']);
-  };
 
   const initHandler = () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'public/libs/pdfjs/build/pdf.worker.min.js';
@@ -298,11 +291,10 @@
     pdfFile.removeEventListener('change', _handleDrop);
   };
 
-  initSplitter();
   initHandler();
   window.addEventListener('beforeunload', removeHandler);
 
-  // if ('serviceWorker' in navigator) {
-  //   navigator.serviceWorker.register('/service-worker.js');
-  // }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
 })();

@@ -26,63 +26,37 @@
     </header>
 
     <main>
-      <div class="split-vertical">
-        <div class="split-panel_top" id="split-top">
-          <div class="split-horizontal">
-            <div class="split-panel_left" id="split-left">
-              <section class="left">
-                <div class="dropzone" id="dropZone">
-                  <div class="active" id="dropzoneInfo">
-                    <input type="file" name="pdf" id="pdfFile" hidden />
-                    <label for="pdfFile">PDF Dokument hier ablegen oder klicken...</label>
-                  </div>
-                  <div class="hidden" id="dropzoneFile">
-                    <div class="name-viewer_container">
-                      <span class="filename" id="dropzoneFileName"></span>
-                      <div class="viewer-container" id="viewerContainer">
-                        <div id="viewer" class="pdfViewer"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <div class="split-panel_right" id="split-right">
-              <section class="right">
-                <div class="dropzone" id="dropZone">
-                  <div class="active" id="dropzoneInfo">
-                    <input type="file" name="pdf" id="pdfFile" hidden />
-                    <label for="pdfFile">PDF Dokument hier ablegen oder klicken...</label>
-                  </div>
-                  <div class="hidden" id="dropzoneFile">
-                    <div class="name-viewer_container">
-                      <span class="filename" id="dropzoneFileName"></span>
-                      <div class="viewer-container" id="viewerContainer">
-                        <div id="viewer" class="pdfViewer"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
+      <section class="left">
+        <div class="dropzone" id="dropZone">
+          <div class="active" id="dropzoneInfo">
+            <input type="file" name="pdf" id="pdfFile" hidden />
+            <label for="pdfFile">PDF Dokument hier ablegen oder klicken...</label>
           </div>
-        </div>
-        <div class="split-panel_bottom" id="split-bottom">
-          <div class="formfields">
-            <div class="active formfields_no-entries" id="formFieldsNoEntries">
-              <p>Keine Daten vorhanden...</p>
-            </div>
-            <div class="hidden formfields_entries" id="formFieldsContainer">
-              <div class="tab">
-                <button class="tablinks selected" id="defaultOpen" data-tab="simplifiedFormFields">Formfelder</button>
-                <button class="tablinks" data-tab="rawFormFields">Rohdaten</button>
+          <div class="hidden" id="dropzoneFile">
+            <div class="name-viewer_container">
+              <span class="filename" id="dropzoneFileName"></span>
+              <div class="viewer-container" id="viewerContainer">
+                <div id="viewer" class="pdfViewer"></div>
               </div>
-              <div class="tabcontent" id="simplifiedFormFields"></div>
-              <div class="tabcontent" id="rawFormFields"></div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <section class="right">
+        <div class="formfields">
+          <div class="active formfields_no-entries" id="formFieldsNoEntries">
+            <p>Keine Daten vorhanden...</p>
+          </div>
+          <div class="hidden formfields_entries" id="formFieldsContainer">
+            <div class="tab">
+              <button class="tablinks selected" id="defaultOpen" data-tab="simplifiedFormFields">Formfelder</button>
+              <button class="tablinks" data-tab="rawFormFields">Rohdaten</button>
+            </div>
+            <div class="tabcontent" id="simplifiedFormFields"></div>
+            <div class="tabcontent" id="rawFormFields"></div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -97,7 +71,6 @@
       </a>
     </footer>
 
-    <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
     <script src="public/libs/pdfjs/build/pdf.min.js"></script>
     <script src="public/libs/pdfjs/web/pdf_viewer.js"></script>
     <script src="public/src/main.js"></script>
