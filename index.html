@@ -30,8 +30,21 @@
         <div class="pdf-tabs">
           <!-- pdf tabs -->
           <div class="tab">
-            <button class="tablinks-pdfs selected" id="defaultOpenTabPdfs" data-tab="leftPdfSelection">Links</button>
-            <button class="tablinks-pdfs" data-tab="rightPdfSelection">Rechts</button>
+            <button
+              class="tablinks-pdfs selected"
+              id="defaultOpenTabPdfs"
+              data-tabs="leftPdfSelection,leftFieldSelection"
+              data-links="tablinks-pdfs::0,tablinks-fields::0"
+            >
+              Links
+            </button>
+            <button
+              class="tablinks-pdfs"
+              data-tabs="rightPdfSelection,rightFieldSelection"
+              data-links="tablinks-pdfs::1,tablinks-fields::1"
+            >
+              Rechts
+            </button>
           </div>
           <!-- pdf tabs content -->
           <!-- pdf tab content left -->
@@ -76,11 +89,24 @@
         <div class="pdf-tabs">
           <!-- field tabs -->
           <div class="tab">
-            <button class="tablinks-fields selected" id="defaultOpenTabFields" data-tab="leftFieldSelection">
+            <button
+              class="tablinks-fields selected"
+              id="defaultOpenTabFields"
+              data-tabs="leftPdfSelection,leftFieldSelection"
+              data-links="tablinks-pdfs::0,tablinks-fields::0"
+            >
               Links
             </button>
-            <button class="tablinks-fields" data-tab="rightFieldSelection">Rechts</button>
-            <button class="tablinks-fields" data-tab="diffFieldSelection">Unterschied</button>
+            <button
+              class="tablinks-fields"
+              data-tabs="rightPdfSelection,rightFieldSelection"
+              data-links="tablinks-pdfs::1,tablinks-fields::1"
+            >
+              Rechts
+            </button>
+            <button class="tablinks-fields" data-tabs="diffFieldSelection" data-links="tablinks-fields::2">
+              Unterschied
+            </button>
           </div>
           <!-- field tabs content -->
           <!-- field tab content left -->
@@ -137,6 +163,7 @@
           <div class="tabcontent-fields" id="diffFieldSelection">
             <!-- fields diff pdf -->
             <!-- TODO -->
+            <!-- https://github.com/kpdecker/jsdiff -->
           </div>
         </div>
       </section>

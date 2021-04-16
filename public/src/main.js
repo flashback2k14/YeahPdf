@@ -165,29 +165,57 @@
   const _handleTabSwitchLeftMain = (ev) => {
     for (let i = 0; i < PDF.tabcontent.length; i++) {
       PDF.tabcontent[i].style.display = 'none';
+      FIELDS.tabcontent[i].style.display = 'none';
     }
 
     for (let i = 0; i < PDF.tablinks.length; i++) {
       PDF.tablinks[i].classList.remove('selected');
+      FIELDS.tablinks[i].classList.remove('selected');
     }
 
-    const tabName = ev.currentTarget.dataset.tab;
-    document.getElementById(tabName).style.display = 'flex';
-    ev.currentTarget.classList.add('selected');
+    const tabNames = ev.currentTarget.dataset.tabs.split(',');
+    const tabLinks = ev.currentTarget.dataset.links.split(',');
+
+    for (const index in tabNames) {
+      if (Object.hasOwnProperty.call(tabNames, index)) {
+        const tabName = tabNames[index];
+        document.getElementById(tabName).style.display = 'flex';
+        const tabLinkParts = tabLinks[index].split('::');
+        const tabLinkId = tabLinkParts[0];
+        const tabLinkIndex = tabLinkParts[1];
+        document.getElementsByClassName(tabLinkId)[tabLinkIndex].classList.add('selected');
+      }
+    }
   };
 
   const _handleTabSwitchRightMain = (ev) => {
     for (let i = 0; i < FIELDS.tabcontent.length; i++) {
       FIELDS.tabcontent[i].style.display = 'none';
+      if (i < 2) {
+        PDF.tabcontent[i].style.display = 'none';
+      }
     }
 
     for (let i = 0; i < FIELDS.tablinks.length; i++) {
       FIELDS.tablinks[i].classList.remove('selected');
+      if (i < 2) {
+        PDF.tablinks[i].classList.remove('selected');
+      }
     }
 
-    const tabName = ev.currentTarget.dataset.tab;
-    document.getElementById(tabName).style.display = 'flex';
-    ev.currentTarget.classList.add('selected');
+    const tabNames = ev.currentTarget.dataset.tabs.split(',');
+    const tabLinks = ev.currentTarget.dataset.links.split(',');
+
+    for (const index in tabNames) {
+      if (Object.hasOwnProperty.call(tabNames, index)) {
+        const tabName = tabNames[index];
+        document.getElementById(tabName).style.display = 'flex';
+        const tabLinkParts = tabLinks[index].split('::');
+        const tabLinkId = tabLinkParts[0];
+        const tabLinkIndex = tabLinkParts[1];
+        document.getElementsByClassName(tabLinkId)[tabLinkIndex].classList.add('selected');
+      }
+    }
   };
 
   const _handleTabSwitchLeftSub = (ev) => {
