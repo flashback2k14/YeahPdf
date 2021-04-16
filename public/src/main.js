@@ -16,6 +16,28 @@
    * PDF
    */
 
+  const _extractValue = (annotation) => {
+    const fieldType = annotation.fieldType;
+    const fieldValue = annotation.fieldValue;
+    const buttonValue = annotation.buttonValue;
+
+    let result = '-';
+
+    if (fieldType === 'Tx') {
+      result = fieldValue === undefined || fieldValue.length === 0 ? '-' : fieldValue;
+    } else if (fieldType === 'Btn') {
+      if (buttonValue === undefined) {
+        result = fieldValue === undefined || fieldValue.length === 0 ? '-' : fieldValue;
+      } else if (buttonValue.length === 0) {
+        result = '-';
+      } else {
+        result = buttonValue;
+      }
+    }
+
+    return result;
+  };
+
   const _getPdfContent = async (pdfInstance, totalPagesCount) => {
     let formFields = {};
 
@@ -26,8 +48,7 @@
         return {
           name: annotation.fieldName,
           type: annotation.fieldType,
-          value: annotation.fieldValue,
-          buttonValue: annotation.buttonValue,
+          value: _extractValue(annotation),
         };
       });
 
@@ -70,16 +91,7 @@
           liType.classList.add('entry_item');
 
           const liValue = document.createElement('li');
-          const value =
-            field.type === 'Tx'
-              ? field.value.length === 0
-                ? '-'
-                : field.value
-              : field.type === 'Btn'
-              ? field.buttonValue.length === 0
-                ? '-'
-                : field.buttonValue
-              : '-';
+          const value = field.value;
 
           liValue.innerText = `Wert: ${value}`;
           liValue.classList.add('entry_item');
