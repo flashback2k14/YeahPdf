@@ -3,10 +3,12 @@ const utils = (() => {
     LEFT: {
       formFieldList: 'formFieldListLeftPdf',
       rawFieldList: 'rawFieldListLeftPdf',
+      viewer: 'viewerContainerLeftPdf',
     },
     RIGHT: {
       formFieldList: 'formFieldListRightPdf',
       rawFieldList: 'rawFieldListRightPdf',
+      viewer: 'viewerContainerRightPdf',
     },
   };
 
@@ -64,14 +66,7 @@ const utils = (() => {
     return formFields;
   };
 
-  const _clearList = () => {
-    const idsForClearing = [
-      _CONSTANTS.LEFT.formFieldList,
-      _CONSTANTS.LEFT.rawFieldList,
-      _CONSTANTS.RIGHT.formFieldList,
-      _CONSTANTS.RIGHT.rawFieldList,
-    ];
-
+  const _clearList = (idsForClearing) => {
     for (const id of idsForClearing) {
       const list = document.getElementById(id);
       if (list) {

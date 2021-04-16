@@ -1,7 +1,12 @@
 ((UTILS, RENDERER) => {
-  const BOTH = {
+  const PDF = {
     tabcontent: document.getElementsByClassName('tabcontent-pdfs'),
     tablinks: document.getElementsByClassName('tablinks-pdfs'),
+  };
+
+  const FIELDS = {
+    tabcontent: document.getElementsByClassName('tabcontent-fields'),
+    tablinks: document.getElementsByClassName('tablinks-fields'),
   };
 
   const LEFT = {
@@ -19,31 +24,32 @@
   };
 
   const RIGHT = {
-    dropZone: document.getElementById('dropZone'),
-    dropzoneInfo: document.getElementById('dropzoneInfo'),
-    pdfFile: document.getElementById('pdfFile'),
-    dropzoneFile: document.getElementById('dropzoneFile'),
-    dropzoneFileName: document.getElementById('dropzoneFileName'),
-    formFieldsNoEntries: document.getElementById('formFieldsNoEntries'),
-    formFieldsContainer: document.getElementById('formFieldsContainer'),
+    dropZone: document.getElementById('dropZoneRightPdf'),
+    dropzoneInfo: document.getElementById('dropzoneInfoRightPdf'),
+    pdfFile: document.getElementById('fileRightPdf'),
+    dropzoneFile: document.getElementById('dropzoneFileRightPdf'),
+    dropzoneFileName: document.getElementById('dropzoneFileNameRightPdf'),
+    formFieldsNoEntries: document.getElementById('formFieldsNoEntriesRightPdf'),
+    formFieldsContainer: document.getElementById('formFieldsContainerRightPdf'),
     tabcontent: document.getElementsByClassName('tabcontent-pdf_right'),
-    tablinks: document.getElementsByClassName('tablinks'),
-    simplifiedFormFields: document.getElementById('simplifiedFormFields'),
-    rawFormFields: document.getElementById('rawFormFields'),
+    tablinks: document.getElementsByClassName('tablinks-pdf_right'),
+    simplifiedFormFields: document.getElementById('simplifiedFormFieldsRightPdf'),
+    rawFormFields: document.getElementById('rawFormFieldsRightPdf'),
   };
 
-  let isNew = true;
+  let isNewLeft = true;
+  let isNewRight = true;
 
   /**
    * DROPZONE
    */
 
-  const _toggleDropzone = () => {
-    if (!isNew) {
+  const _toggleDropzoneLeft = () => {
+    if (!isNewLeft) {
       return;
     }
 
-    isNew = !isNew;
+    isNewLeft = !isNewLeft;
 
     LEFT.dropzoneInfo.classList.toggle('active');
     LEFT.dropzoneInfo.classList.toggle('hidden');
@@ -56,20 +62,20 @@
     LEFT.formFieldsContainer.classList.toggle('hidden');
   };
 
-  const _initDropzone = (droppedFile) => {
+  const _initDropzoneLeft = (droppedFile) => {
     LEFT.dropzoneFileName.innerText = droppedFile.name;
     LEFT.dropZone.style.borderColor = 'blue';
   };
 
-  const _handleDrop = (ev) => {
+  const _handleDropLeft = (ev) => {
     ev.preventDefault();
 
-    UTILS.clearList();
+    UTILS.clearList([UTILS.CONSTANTS.LEFT.formFieldList, UTILS.CONSTANTS.LEFT.rawFieldList]);
 
     const droppedFile = UTILS.getPdfFile(ev);
 
-    _toggleDropzone();
-    _initDropzone(droppedFile);
+    _toggleDropzoneLeft();
+    _initDropzoneLeft(droppedFile);
 
     const fileReader = new FileReader();
     fileReader.onload = async function () {
@@ -78,21 +84,78 @@
       const formFields = await UTILS.getPdfContent(pdf, pdf.numPages);
       RENDERER.fields(formFields, UTILS.CONSTANTS.LEFT.formFieldList, LEFT.simplifiedFormFields);
       RENDERER.raw(formFields, UTILS.CONSTANTS.LEFT.rawFieldList, LEFT.rawFormFields);
-      RENDERER.viewer(pdf);
-      document.getElementById('defaultOpenTabFields').click();
+      // RENDERER.viewer(pdf, UTILS.CONSTANTS.LEFT.viewer);
+      document.getElementById('defaultOpenTabFieldsLeft').click();
     };
 
     fileReader.readAsArrayBuffer(droppedFile);
   };
 
-  const _handleDragOver = (ev) => {
+  const _handleDragOverLeft = (ev) => {
     ev.preventDefault();
     LEFT.dropZone.style.borderColor = 'red';
   };
 
-  const _handleDragLeave = (ev) => {
+  const _handleDragLeaveLeft = (ev) => {
     ev.preventDefault();
     LEFT.dropZone.style.borderColor = 'blue';
+  };
+
+  const _toggleDropzoneRight = () => {
+    if (!isNewRight) {
+      return;
+    }
+
+    isNewRight = !isNewRight;
+
+    RIGHT.dropzoneInfo.classList.toggle('active');
+    RIGHT.dropzoneInfo.classList.toggle('hidden');
+    RIGHT.dropzoneFile.classList.toggle('active');
+    RIGHT.dropzoneFile.classList.toggle('hidden');
+
+    RIGHT.formFieldsNoEntries.classList.toggle('active');
+    RIGHT.formFieldsNoEntries.classList.toggle('hidden');
+    RIGHT.formFieldsContainer.classList.toggle('active');
+    RIGHT.formFieldsContainer.classList.toggle('hidden');
+  };
+
+  const _initDropzoneRight = (droppedFile) => {
+    RIGHT.dropzoneFileName.innerText = droppedFile.name;
+    RIGHT.dropZone.style.borderColor = 'blue';
+  };
+
+  const _handleDropRight = (ev) => {
+    ev.preventDefault();
+
+    UTILS.clearList([UTILS.CONSTANTS.RIGHT.formFieldList, UTILS.CONSTANTS.RIGHT.rawFieldList]);
+
+    const droppedFile = UTILS.getPdfFile(ev);
+
+    _toggleDropzoneRight();
+    _initDropzoneRight(droppedFile);
+
+    const fileReader = new FileReader();
+    fileReader.onload = async function () {
+      const typedarray = new Uint8Array(this.result);
+      const pdf = await pdfjsLib.getDocument(typedarray).promise;
+      const formFields = await UTILS.getPdfContent(pdf, pdf.numPages);
+      RENDERER.fields(formFields, UTILS.CONSTANTS.RIGHT.formFieldList, RIGHT.simplifiedFormFields);
+      RENDERER.raw(formFields, UTILS.CONSTANTS.RIGHT.rawFieldList, RIGHT.rawFormFields);
+      // RENDERER.viewer(pdf, UTILS.CONSTANTS.RIGHT.viewer);
+      document.getElementById('defaultOpenTabFieldsRight').click();
+    };
+
+    fileReader.readAsArrayBuffer(droppedFile);
+  };
+
+  const _handleDragOverRight = (ev) => {
+    ev.preventDefault();
+    RIGHT.dropZone.style.borderColor = 'red';
+  };
+
+  const _handleDragLeaveRight = (ev) => {
+    ev.preventDefault();
+    RIGHT.dropZone.style.borderColor = 'blue';
   };
 
   /**
@@ -100,12 +163,26 @@
    */
 
   const _handleTabSwitchLeftMain = (ev) => {
-    for (let i = 0; i < BOTH.tabcontent.length; i++) {
-      BOTH.tabcontent[i].style.display = 'none';
+    for (let i = 0; i < PDF.tabcontent.length; i++) {
+      PDF.tabcontent[i].style.display = 'none';
     }
 
-    for (let i = 0; i < BOTH.tablinks.length; i++) {
-      BOTH.tablinks[i].classList.remove('selected');
+    for (let i = 0; i < PDF.tablinks.length; i++) {
+      PDF.tablinks[i].classList.remove('selected');
+    }
+
+    const tabName = ev.currentTarget.dataset.tab;
+    document.getElementById(tabName).style.display = 'flex';
+    ev.currentTarget.classList.add('selected');
+  };
+
+  const _handleTabSwitchRightMain = (ev) => {
+    for (let i = 0; i < FIELDS.tabcontent.length; i++) {
+      FIELDS.tabcontent[i].style.display = 'none';
+    }
+
+    for (let i = 0; i < FIELDS.tablinks.length; i++) {
+      FIELDS.tablinks[i].classList.remove('selected');
     }
 
     const tabName = ev.currentTarget.dataset.tab;
@@ -127,6 +204,20 @@
     ev.currentTarget.classList.add('selected');
   };
 
+  const _handleTabSwitchRightSub = (ev) => {
+    for (let i = 0; i < RIGHT.tabcontent.length; i++) {
+      RIGHT.tabcontent[i].style.display = 'none';
+    }
+
+    for (let i = 0; i < RIGHT.tablinks.length; i++) {
+      RIGHT.tablinks[i].classList.remove('selected');
+    }
+
+    const tabName = ev.currentTarget.dataset.tab;
+    document.getElementById(tabName).style.display = 'flex';
+    ev.currentTarget.classList.add('selected');
+  };
+
   /**
    * SETUP
    */
@@ -134,30 +225,45 @@
   const initHandler = () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'public/libs/pdfjs/build/pdf.worker.min.js';
 
-    LEFT.dropZone.addEventListener('drop', _handleDrop);
-    LEFT.dropZone.addEventListener('dragover', _handleDragOver);
-    LEFT.dropZone.addEventListener('dragleave', _handleDragLeave);
+    LEFT.dropZone.addEventListener('drop', _handleDropLeft);
+    LEFT.dropZone.addEventListener('dragover', _handleDragOverLeft);
+    LEFT.dropZone.addEventListener('dragleave', _handleDragLeaveLeft);
 
-    Array.from(BOTH.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftMain));
+    RIGHT.dropZone.addEventListener('drop', _handleDropRight);
+    RIGHT.dropZone.addEventListener('dragover', _handleDragOverRight);
+    RIGHT.dropZone.addEventListener('dragleave', _handleDragLeaveRight);
+
+    Array.from(PDF.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftMain));
+    Array.from(FIELDS.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchRightMain));
     Array.from(LEFT.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftSub));
+    Array.from(RIGHT.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchRightSub));
 
-    LEFT.pdfFile.addEventListener('change', _handleDrop);
+    LEFT.pdfFile.addEventListener('change', _handleDropLeft);
+    RIGHT.pdfFile.addEventListener('change', _handleDropRight);
   };
 
   const removeHandler = () => {
-    LEFT.dropZone.removeEventListener('drop', _handleDrop);
-    LEFT.dropZone.removeEventListener('dragover', _handleDragOver);
-    LEFT.dropZone.removeEventListener('dragleave', _handleDragLeave);
+    LEFT.dropZone.removeEventListener('drop', _handleDropLeft);
+    LEFT.dropZone.removeEventListener('dragover', _handleDragOverLeft);
+    LEFT.dropZone.removeEventListener('dragleave', _handleDragLeaveLeft);
 
-    Array.from(BOTH.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftMain));
-    Array.from(LEFT.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftSub));
+    RIGHT.dropZone.removeEventListener('drop', _handleDropRight);
+    RIGHT.dropZone.removeEventListener('dragover', _handleDragOverRight);
+    RIGHT.dropZone.removeEventListener('dragleave', _handleDragLeaveRight);
 
-    LEFT.pdfFile.removeEventListener('change', _handleDrop);
+    Array.from(PDF.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchLeftMain));
+    Array.from(FIELDS.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchRightMain));
+    Array.from(LEFT.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchLeftSub));
+    Array.from(RIGHT.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchRightSub));
+
+    LEFT.pdfFile.removeEventListener('change', _handleDropLeft);
+    RIGHT.pdfFile.removeEventListener('change', _handleDropRight);
   };
 
   initHandler();
   window.addEventListener('beforeunload', removeHandler);
   document.getElementById('defaultOpenTabPdfs').click();
+  document.getElementById('defaultOpenTabFields').click();
 
   // if ('serviceWorker' in navigator) {
   //   navigator.serviceWorker.register('/service-worker.js');

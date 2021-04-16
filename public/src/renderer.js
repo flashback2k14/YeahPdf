@@ -86,8 +86,8 @@ const renderer = (() => {
     holderContainer.appendChild(holder);
   };
 
-  const _renderViewer = (pdf) => {
-    const container = document.getElementById('viewerContainer');
+  const _renderViewer = (pdf, id) => {
+    const container = document.getElementById(id);
     const eventBus = new pdfjsViewer.EventBus();
 
     const pdfViewer = new pdfjsViewer.PDFViewer({

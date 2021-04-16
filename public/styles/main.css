@@ -45,7 +45,7 @@ main .left .dropzone {
   align-items: center;
   justify-content: center;
 
-  width: calc(100vw / 2 - 36px);
+  width: calc(100vw / 2 - 28px);
   height: calc(100vh - 60px - 48px - 16px - 55px);
 
   border: 2px blue dashed;
@@ -78,8 +78,8 @@ main .left .viewer-container {
 }
 
 main .right .formfields {
-  width: calc(100vw / 2 - 36px);
-  height: calc(100vh - 60px - 48px - 19px);
+  width: calc(100vw / 2 - 28px);
+  height: calc(100vh - 60px - 48px - 48px - 18px);
 
   border: 2px lightslategray solid;
   border-radius: 4px;
@@ -131,9 +131,11 @@ main .right .formfields .formfields_entries {
 }
 
 .tabcontent-pdfs,
+.tabcontent-fields,
+.tabcontent-pdfs-fields,
 .tabcontent-pdf_left,
 .tabcontent-pdf_right {
-  display: none;
+  /* display: none; */
   overflow: auto;
   height: inherit;
   width: calc(100vw / 2 - 60px);
@@ -142,8 +144,10 @@ main .right .formfields .formfields_entries {
   border-top: 1px solid #ccc;
 }
 
-.tabcontent-pdfs {
-  width: calc(100vw / 2 - 48px);
+.tabcontent-pdfs,
+.tabcontent-fields,
+.tabcontent-pdfs-fields {
+  width: calc(100vw / 2 - 24px);
   padding: 6px 0 0 0;
 }
 
