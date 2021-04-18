@@ -12,6 +12,7 @@ const utils = (() => {
     },
     DIFF: {
       container: 'diffingContainerResult',
+      TAB_ID: 2,
     },
   };
 
@@ -84,11 +85,16 @@ const utils = (() => {
     return copiedFields;
   };
 
+  const _isEmpty = (obj) => {
+    return Object.keys(obj).length === 0;
+  };
+
   return {
     CONSTANTS: _CONSTANTS,
     getPdfFile: _getPdfFile,
     getPdfContent: _getPdfContent,
     clearList: _clearList,
     removeRaw: _removeRaw,
+    isEmpty: _isEmpty,
   };
 })();

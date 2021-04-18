@@ -43,7 +43,6 @@
 
   const DIFF = {
     container: document.getElementById('diffingContainer'),
-    performDiffing: document.getElementById('btnPerformDiffing'),
   };
 
   /**
@@ -96,7 +95,7 @@
       LEFT.formFields = formFields;
       RENDERER.fields(formFields, UTILS.CONSTANTS.LEFT.formFieldList, LEFT.simplifiedFormFields);
       RENDERER.raw(formFields, UTILS.CONSTANTS.LEFT.rawFieldList, LEFT.rawFormFields);
-      // RENDERER.viewer(pdf, UTILS.CONSTANTS.LEFT.viewer);
+      RENDERER.viewer(pdf, UTILS.CONSTANTS.LEFT.viewer);
       document.getElementById('defaultOpenTabFieldsLeft').click();
     };
 
@@ -159,7 +158,7 @@
       RIGHT.formFields = formFields;
       RENDERER.fields(formFields, UTILS.CONSTANTS.RIGHT.formFieldList, RIGHT.simplifiedFormFields);
       RENDERER.raw(formFields, UTILS.CONSTANTS.RIGHT.rawFieldList, RIGHT.rawFormFields);
-      // RENDERER.viewer(pdf, UTILS.CONSTANTS.RIGHT.viewer);
+      RENDERER.viewer(pdf, UTILS.CONSTANTS.RIGHT.viewer);
       document.getElementById('defaultOpenTabFieldsRight').click();
     };
 
@@ -209,14 +208,14 @@
   const _handleTabSwitchRightMain = (ev) => {
     for (let i = 0; i < FIELDS.tabcontent.length; i++) {
       FIELDS.tabcontent[i].style.display = 'none';
-      if (i < 2) {
+      if (i < UTILS.CONSTANTS.DIFF.TAB_ID) {
         PDF.tabcontent[i].style.display = 'none';
       }
     }
 
     for (let i = 0; i < FIELDS.tablinks.length; i++) {
       FIELDS.tablinks[i].classList.remove('selected');
-      if (i < 2) {
+      if (i < UTILS.CONSTANTS.DIFF.TAB_ID) {
         PDF.tablinks[i].classList.remove('selected');
       }
     }
@@ -232,6 +231,9 @@
         const tabLinkId = tabLinkParts[0];
         const tabLinkIndex = tabLinkParts[1];
         document.getElementsByClassName(tabLinkId)[tabLinkIndex].classList.add('selected');
+        if (Number(tabLinkIndex) === UTILS.CONSTANTS.DIFF.TAB_ID) {
+          _handleDiffing();
+        }
       }
     }
   };
@@ -274,6 +276,11 @@
 
     const left = UTILS.removeRaw(LEFT.formFields);
     const right = UTILS.removeRaw(RIGHT.formFields);
+
+    if (UTILS.isEmpty(left) || UTILS.isEmpty(right)) {
+      return;
+    }
+
     const result = Diff.diffJson(left, right);
 
     result.forEach((part) => {
@@ -309,7 +316,6 @@
 
     LEFT.pdfFile.addEventListener('change', _handleDropLeft);
     RIGHT.pdfFile.addEventListener('change', _handleDropRight);
-    DIFF.performDiffing.addEventListener('click', _handleDiffing);
   };
 
   const removeHandler = () => {
@@ -328,7 +334,6 @@
 
     LEFT.pdfFile.removeEventListener('change', _handleDropLeft);
     RIGHT.pdfFile.removeEventListener('change', _handleDropRight);
-    DIFF.performDiffing.removeEventListener('click', _handleDiffing);
   };
 
   initHandler();
@@ -336,7 +341,7 @@
   document.getElementById('defaultOpenTabPdfs').click();
   document.getElementById('defaultOpenTabFields').click();
 
-  // if ('serviceWorker' in navigator) {
-  //   navigator.serviceWorker.register('/service-worker.js');
-  // }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
 })(utils, renderer);

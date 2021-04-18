@@ -147,10 +147,14 @@ main .right .formfields .formfields_entries {
 
 .tabcontent-pdfs,
 .tabcontent-fields,
-.tabcontent-pdfs-fields,
-.tabcontent-diff {
+.tabcontent-pdfs-fields {
   width: calc(100vw / 2 - 24px);
   padding: 6px 0 0 0;
+}
+
+.tabcontent-diff {
+  width: calc(100vw / 2 - 50px);
+  padding: 8px 12px 8px 8px;
 }
 
 ul {

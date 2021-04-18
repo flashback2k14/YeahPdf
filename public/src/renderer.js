@@ -93,6 +93,8 @@ const renderer = (() => {
     const pdfViewer = new pdfjsViewer.PDFViewer({
       container,
       eventBus,
+      renderer: 'svg',
+      textLayerMode: 0,
     });
 
     eventBus.on('pagesinit', function () {
