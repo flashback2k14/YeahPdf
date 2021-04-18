@@ -1,268 +1,297 @@
-(() => {
-  const dropZone = document.getElementById('dropZone');
-  const dropzoneInfo = document.getElementById('dropzoneInfo');
-  const dropzoneFile = document.getElementById('dropzoneFile');
-  const dropzoneFileName = document.getElementById('dropzoneFileName');
-  const formFieldsNoEntries = document.getElementById('formFieldsNoEntries');
-  const formFieldsContainer = document.getElementById('formFieldsContainer');
-  const tablinks = document.getElementsByClassName('tablinks');
-  const simplifiedFormFields = document.getElementById('simplifiedFormFields');
-  const rawFormFields = document.getElementById('rawFormFields');
-  const pdfFile = document.getElementById('pdfFile');
-
-  let isNew = true;
-
-  /**
-   * PDF
-   */
-
-  const _extractValue = (annotation) => {
-    const fieldType = annotation.fieldType;
-    const fieldValue = annotation.fieldValue;
-    const buttonValue = annotation.buttonValue;
-
-    let result = '-';
-
-    if (fieldType === 'Tx') {
-      result = fieldValue === undefined || fieldValue.length === 0 ? '-' : fieldValue;
-    } else if (fieldType === 'Btn') {
-      if (buttonValue === undefined) {
-        result = fieldValue === undefined || fieldValue.length === 0 ? '-' : fieldValue;
-      } else if (buttonValue.length === 0) {
-        result = '-';
-      } else {
-        result = buttonValue;
-      }
-    }
-
-    return result;
+((UTILS, RENDERER) => {
+  const PDF = {
+    tabcontent: document.getElementsByClassName('tabcontent-pdfs'),
+    tablinks: document.getElementsByClassName('tablinks-pdfs'),
   };
 
-  const _getPdfContent = async (pdfInstance, totalPagesCount) => {
-    let formFields = {};
-
-    for (let index = 1; index <= totalPagesCount; index++) {
-      const page = await pdfInstance.getPage(index);
-      const annotations = await page.getAnnotations();
-      const fields = annotations.map((annotation) => {
-        return {
-          name: annotation.fieldName,
-          type: annotation.fieldType,
-          value: _extractValue(annotation),
-        };
-      });
-
-      formFields[index] = {
-        page: index,
-        fields,
-        raw: annotations,
-      };
-    }
-
-    return formFields;
+  const FIELDS = {
+    tabcontent: document.getElementsByClassName('tabcontent-fields'),
+    tablinks: document.getElementsByClassName('tablinks-fields'),
   };
 
-  const _render = (entries) => {
-    const ul = document.createElement('ul');
-    ul.id = 'formFieldList';
-
-    Object.values(entries).forEach((entry) => {
-      const pageLi = document.createElement('li');
-      pageLi.innerText = 'Seite ' + entry.page;
-      pageLi.classList.add('page-list_item');
-
-      const pageUl = document.createElement('ul');
-
-      if (entry.fields.length === 0) {
-        const noEntry = document.createElement('li');
-        noEntry.innerText = 'keine Felder enthalten';
-        noEntry.classList.add('no-entry_item');
-        pageUl.appendChild(noEntry);
-      } else {
-        entry.fields.forEach((field) => {
-          const liName = document.createElement('li');
-          liName.innerText = 'Feldname: ' + field.name;
-          liName.classList.add('entry_item');
-
-          const fieldUl = document.createElement('ul');
-
-          const liType = document.createElement('li');
-          liType.innerText = 'Typ: ' + field.type;
-          liType.classList.add('entry_item');
-
-          const liValue = document.createElement('li');
-          const value = field.value;
-
-          liValue.innerText = `Wert: ${value}`;
-          liValue.classList.add('entry_item');
-
-          fieldUl.appendChild(liType);
-          fieldUl.appendChild(liValue);
-
-          liName.appendChild(fieldUl);
-          pageUl.appendChild(liName);
-        });
-      }
-
-      pageLi.appendChild(pageUl);
-      ul.appendChild(pageLi);
-    });
-
-    simplifiedFormFields.appendChild(ul);
+  const LEFT = {
+    dropZone: document.getElementById('dropZoneLeftPdf'),
+    dropzoneInfo: document.getElementById('dropzoneInfoLeftPdf'),
+    pdfFile: document.getElementById('fileLeftPdf'),
+    dropzoneFile: document.getElementById('dropzoneFileLeftPdf'),
+    dropzoneFileName: document.getElementById('dropzoneFileNameLeftPdf'),
+    formFieldsNoEntries: document.getElementById('formFieldsNoEntriesLeftPdf'),
+    formFieldsContainer: document.getElementById('formFieldsContainerLeftPdf'),
+    tabcontent: document.getElementsByClassName('tabcontent-pdf_left'),
+    tablinks: document.getElementsByClassName('tablinks-pdf_left'),
+    simplifiedFormFields: document.getElementById('simplifiedFormFieldsLeftPdf'),
+    rawFormFields: document.getElementById('rawFormFieldsLeftPdf'),
+    isNew: true,
+    formFields: {},
   };
 
-  const _renderRaw = (entries) => {
-    const holder = document.createElement('div');
-    holder.id = 'rawFieldList';
-
-    Object.values(entries).forEach((entry) => {
-      if (entry.fields.length === 0) {
-        const pageHolder = document.createElement('div');
-        const pageHeader = document.createElement('h4');
-        pageHeader.innerText = 'Seite ' + entry.page;
-
-        const pageSpan = document.createElement('span');
-        pageSpan.innerText = 'keine Felder enthalten';
-        pageSpan.classList.add('no-entry_item');
-
-        pageHolder.appendChild(pageHeader);
-        pageHolder.appendChild(pageSpan);
-
-        holder.appendChild(pageHolder);
-      } else {
-        const pageHolder = document.createElement('div');
-        const pageHeader = document.createElement('h4');
-        pageHeader.innerText = 'Seite ' + entry.page;
-
-        const pageCode = document.createElement('code');
-        const pagePre = document.createElement('pre');
-        pagePre.innerHTML = JSON.stringify(entry.raw, null, 2);
-        pageCode.appendChild(pagePre);
-
-        pageHolder.appendChild(pageHeader);
-        pageHolder.appendChild(pageCode);
-
-        holder.appendChild(pageHolder);
-      }
-    });
-
-    rawFormFields.appendChild(holder);
+  const RIGHT = {
+    dropZone: document.getElementById('dropZoneRightPdf'),
+    dropzoneInfo: document.getElementById('dropzoneInfoRightPdf'),
+    pdfFile: document.getElementById('fileRightPdf'),
+    dropzoneFile: document.getElementById('dropzoneFileRightPdf'),
+    dropzoneFileName: document.getElementById('dropzoneFileNameRightPdf'),
+    formFieldsNoEntries: document.getElementById('formFieldsNoEntriesRightPdf'),
+    formFieldsContainer: document.getElementById('formFieldsContainerRightPdf'),
+    tabcontent: document.getElementsByClassName('tabcontent-pdf_right'),
+    tablinks: document.getElementsByClassName('tablinks-pdf_right'),
+    simplifiedFormFields: document.getElementById('simplifiedFormFieldsRightPdf'),
+    rawFormFields: document.getElementById('rawFormFieldsRightPdf'),
+    isNew: true,
+    formFields: {},
   };
 
-  const _renderViewer = (pdf) => {
-    const container = document.getElementById('viewerContainer');
-    const eventBus = new pdfjsViewer.EventBus();
-
-    const pdfViewer = new pdfjsViewer.PDFViewer({
-      container,
-      eventBus,
-    });
-
-    eventBus.on('pagesinit', function () {
-      pdfViewer.currentScaleValue = 'page-width';
-    });
-
-    pdfViewer.setDocument(pdf);
-  };
-
-  const _clearList = () => {
-    const formFieldList = document.getElementById('formFieldList');
-    if (formFieldList) {
-      formFieldList.parentNode.removeChild(formFieldList);
-    }
-    const rawFieldList = document.getElementById('rawFieldList');
-    if (rawFieldList) {
-      rawFieldList.parentNode.removeChild(rawFieldList);
-    }
+  const DIFF = {
+    container: document.getElementById('diffingContainer'),
   };
 
   /**
    * DROPZONE
    */
 
-  const _getPdfFile = (ev) => {
-    return 'dataTransfer' in ev
-      ? ev.dataTransfer.items && ev.dataTransfer.items[0].kind === 'file'
-        ? ev.dataTransfer.items[0].getAsFile()
-        : ev.dataTransfer.files[0]
-      : ev.target.files[0];
-  };
-
-  const _toggleDropzone = () => {
-    if (!isNew) {
+  const _toggleDropzoneLeft = () => {
+    if (!LEFT.isNew) {
       return;
     }
 
-    isNew = !isNew;
+    LEFT.isNew = !LEFT.isNew;
 
-    dropzoneInfo.classList.toggle('active');
-    dropzoneInfo.classList.toggle('hidden');
-    dropzoneFile.classList.toggle('active');
-    dropzoneFile.classList.toggle('hidden');
+    LEFT.dropzoneInfo.classList.toggle('active');
+    LEFT.dropzoneInfo.classList.toggle('hidden');
+    LEFT.dropzoneFile.classList.toggle('active');
+    LEFT.dropzoneFile.classList.toggle('hidden');
 
-    formFieldsNoEntries.classList.toggle('active');
-    formFieldsNoEntries.classList.toggle('hidden');
-    formFieldsContainer.classList.toggle('active');
-    formFieldsContainer.classList.toggle('hidden');
+    LEFT.formFieldsNoEntries.classList.toggle('active');
+    LEFT.formFieldsNoEntries.classList.toggle('hidden');
+    LEFT.formFieldsContainer.classList.toggle('active');
+    LEFT.formFieldsContainer.classList.toggle('hidden');
   };
 
-  const _initDropzone = (droppedFile) => {
-    dropzoneFileName.innerText = droppedFile.name;
-    dropZone.style.borderColor = 'blue';
+  const _initDropzoneLeft = (droppedFile) => {
+    LEFT.dropzoneFileName.innerText = droppedFile.name;
+    LEFT.dropZone.style.borderColor = 'blue';
   };
 
-  const _handleDrop = (ev) => {
+  const _handleDropLeft = (ev) => {
     ev.preventDefault();
 
-    _clearList();
+    UTILS.clearList([
+      UTILS.CONSTANTS.LEFT.formFieldList,
+      UTILS.CONSTANTS.LEFT.rawFieldList,
+      UTILS.CONSTANTS.DIFF.container,
+    ]);
+    LEFT.formFields = {};
 
-    const droppedFile = _getPdfFile(ev);
+    const droppedFile = UTILS.getPdfFile(ev);
 
-    _toggleDropzone();
-    _initDropzone(droppedFile);
+    _toggleDropzoneLeft();
+    _initDropzoneLeft(droppedFile);
 
     const fileReader = new FileReader();
     fileReader.onload = async function () {
       const typedarray = new Uint8Array(this.result);
       const pdf = await pdfjsLib.getDocument(typedarray).promise;
-      const formFields = await _getPdfContent(pdf, pdf.numPages);
-      _render(formFields);
-      _renderRaw(formFields);
-      _renderViewer(pdf);
-      document.getElementById('defaultOpen').click();
+      const formFields = await UTILS.getPdfContent(pdf, pdf.numPages);
+      LEFT.formFields = formFields;
+      RENDERER.fields(formFields, UTILS.CONSTANTS.LEFT.formFieldList, LEFT.simplifiedFormFields);
+      RENDERER.raw(formFields, UTILS.CONSTANTS.LEFT.rawFieldList, LEFT.rawFormFields);
+      RENDERER.viewer(pdf, UTILS.CONSTANTS.LEFT.viewer);
+      document.getElementById('defaultOpenTabFieldsLeft').click();
     };
 
     fileReader.readAsArrayBuffer(droppedFile);
   };
 
-  const _handleDragOver = (ev) => {
+  const _handleDragOverLeft = (ev) => {
     ev.preventDefault();
-    dropZone.style.borderColor = 'red';
+    LEFT.dropZone.style.borderColor = 'red';
   };
 
-  const _handleDragLeave = (ev) => {
+  const _handleDragLeaveLeft = (ev) => {
     ev.preventDefault();
-    dropZone.style.borderColor = 'blue';
+    LEFT.dropZone.style.borderColor = 'blue';
+  };
+
+  const _toggleDropzoneRight = () => {
+    if (!RIGHT.isNew) {
+      return;
+    }
+
+    RIGHT.isNew = !RIGHT.isNew;
+
+    RIGHT.dropzoneInfo.classList.toggle('active');
+    RIGHT.dropzoneInfo.classList.toggle('hidden');
+    RIGHT.dropzoneFile.classList.toggle('active');
+    RIGHT.dropzoneFile.classList.toggle('hidden');
+
+    RIGHT.formFieldsNoEntries.classList.toggle('active');
+    RIGHT.formFieldsNoEntries.classList.toggle('hidden');
+    RIGHT.formFieldsContainer.classList.toggle('active');
+    RIGHT.formFieldsContainer.classList.toggle('hidden');
+  };
+
+  const _initDropzoneRight = (droppedFile) => {
+    RIGHT.dropzoneFileName.innerText = droppedFile.name;
+    RIGHT.dropZone.style.borderColor = 'blue';
+  };
+
+  const _handleDropRight = (ev) => {
+    ev.preventDefault();
+
+    UTILS.clearList([
+      UTILS.CONSTANTS.RIGHT.formFieldList,
+      UTILS.CONSTANTS.RIGHT.rawFieldList,
+      UTILS.CONSTANTS.DIFF.container,
+    ]);
+    RIGHT.formFields = {};
+
+    const droppedFile = UTILS.getPdfFile(ev);
+
+    _toggleDropzoneRight();
+    _initDropzoneRight(droppedFile);
+
+    const fileReader = new FileReader();
+    fileReader.onload = async function () {
+      const typedarray = new Uint8Array(this.result);
+      const pdf = await pdfjsLib.getDocument(typedarray).promise;
+      const formFields = await UTILS.getPdfContent(pdf, pdf.numPages);
+      RIGHT.formFields = formFields;
+      RENDERER.fields(formFields, UTILS.CONSTANTS.RIGHT.formFieldList, RIGHT.simplifiedFormFields);
+      RENDERER.raw(formFields, UTILS.CONSTANTS.RIGHT.rawFieldList, RIGHT.rawFormFields);
+      RENDERER.viewer(pdf, UTILS.CONSTANTS.RIGHT.viewer);
+      document.getElementById('defaultOpenTabFieldsRight').click();
+    };
+
+    fileReader.readAsArrayBuffer(droppedFile);
+  };
+
+  const _handleDragOverRight = (ev) => {
+    ev.preventDefault();
+    RIGHT.dropZone.style.borderColor = 'red';
+  };
+
+  const _handleDragLeaveRight = (ev) => {
+    ev.preventDefault();
+    RIGHT.dropZone.style.borderColor = 'blue';
   };
 
   /**
    * TABS
    */
 
-  const _handleTabSwitch = (ev) => {
+  const _handleTabSwitchLeftMain = (ev) => {
+    for (let i = 0; i < PDF.tabcontent.length; i++) {
+      PDF.tabcontent[i].style.display = 'none';
+      FIELDS.tabcontent[i].style.display = 'none';
+    }
+
+    for (let i = 0; i < PDF.tablinks.length; i++) {
+      PDF.tablinks[i].classList.remove('selected');
+      FIELDS.tablinks[i].classList.remove('selected');
+    }
+
+    const tabNames = ev.currentTarget.dataset.tabs.split(',');
+    const tabLinks = ev.currentTarget.dataset.links.split(',');
+
+    for (const index in tabNames) {
+      if (Object.hasOwnProperty.call(tabNames, index)) {
+        const tabName = tabNames[index];
+        document.getElementById(tabName).style.display = 'flex';
+        const tabLinkParts = tabLinks[index].split('::');
+        const tabLinkId = tabLinkParts[0];
+        const tabLinkIndex = tabLinkParts[1];
+        document.getElementsByClassName(tabLinkId)[tabLinkIndex].classList.add('selected');
+      }
+    }
+  };
+
+  const _handleTabSwitchRightMain = (ev) => {
+    for (let i = 0; i < FIELDS.tabcontent.length; i++) {
+      FIELDS.tabcontent[i].style.display = 'none';
+      if (i < UTILS.CONSTANTS.DIFF.TAB_ID) {
+        PDF.tabcontent[i].style.display = 'none';
+      }
+    }
+
+    for (let i = 0; i < FIELDS.tablinks.length; i++) {
+      FIELDS.tablinks[i].classList.remove('selected');
+      if (i < UTILS.CONSTANTS.DIFF.TAB_ID) {
+        PDF.tablinks[i].classList.remove('selected');
+      }
+    }
+
+    const tabNames = ev.currentTarget.dataset.tabs.split(',');
+    const tabLinks = ev.currentTarget.dataset.links.split(',');
+
+    for (const index in tabNames) {
+      if (Object.hasOwnProperty.call(tabNames, index)) {
+        const tabName = tabNames[index];
+        document.getElementById(tabName).style.display = 'flex';
+        const tabLinkParts = tabLinks[index].split('::');
+        const tabLinkId = tabLinkParts[0];
+        const tabLinkIndex = tabLinkParts[1];
+        document.getElementsByClassName(tabLinkId)[tabLinkIndex].classList.add('selected');
+        if (Number(tabLinkIndex) === UTILS.CONSTANTS.DIFF.TAB_ID) {
+          _handleDiffing();
+        }
+      }
+    }
+  };
+
+  const _handleTabSwitchLeftSub = (ev) => {
+    for (let i = 0; i < LEFT.tabcontent.length; i++) {
+      LEFT.tabcontent[i].style.display = 'none';
+    }
+
+    for (let i = 0; i < LEFT.tablinks.length; i++) {
+      LEFT.tablinks[i].classList.remove('selected');
+    }
+
     const tabName = ev.currentTarget.dataset.tab;
-
-    const tabcontent = document.getElementsByClassName('tabcontent');
-    for (let i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = 'none';
-    }
-
-    for (let i = 0; i < tablinks.length; i++) {
-      tablinks[i].classList.remove('selected');
-    }
-
     document.getElementById(tabName).style.display = 'flex';
     ev.currentTarget.classList.add('selected');
+  };
+
+  const _handleTabSwitchRightSub = (ev) => {
+    for (let i = 0; i < RIGHT.tabcontent.length; i++) {
+      RIGHT.tabcontent[i].style.display = 'none';
+    }
+
+    for (let i = 0; i < RIGHT.tablinks.length; i++) {
+      RIGHT.tablinks[i].classList.remove('selected');
+    }
+
+    const tabName = ev.currentTarget.dataset.tab;
+    document.getElementById(tabName).style.display = 'flex';
+    ev.currentTarget.classList.add('selected');
+  };
+
+  /**
+   * DIFFING
+   */
+
+  const _handleDiffing = () => {
+    const holder = document.createElement('div');
+    holder.id = UTILS.CONSTANTS.DIFF.container;
+
+    const left = UTILS.removeRaw(LEFT.formFields);
+    const right = UTILS.removeRaw(RIGHT.formFields);
+
+    if (UTILS.isEmpty(left) || UTILS.isEmpty(right)) {
+      return;
+    }
+
+    const result = Diff.diffJson(left, right);
+
+    result.forEach((part) => {
+      const color = part.added ? 'green' : part.removed ? 'red' : 'grey';
+      const span = document.createElement('span');
+      span.style.color = color;
+      span.appendChild(document.createTextNode(part.value));
+      holder.appendChild(span);
+    });
+
+    DIFF.container.appendChild(holder);
   };
 
   /**
@@ -272,29 +301,47 @@
   const initHandler = () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'public/libs/pdfjs/build/pdf.worker.min.js';
 
-    dropZone.addEventListener('drop', _handleDrop);
-    dropZone.addEventListener('dragover', _handleDragOver);
-    dropZone.addEventListener('dragleave', _handleDragLeave);
+    LEFT.dropZone.addEventListener('drop', _handleDropLeft);
+    LEFT.dropZone.addEventListener('dragover', _handleDragOverLeft);
+    LEFT.dropZone.addEventListener('dragleave', _handleDragLeaveLeft);
 
-    Array.from(tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitch));
+    RIGHT.dropZone.addEventListener('drop', _handleDropRight);
+    RIGHT.dropZone.addEventListener('dragover', _handleDragOverRight);
+    RIGHT.dropZone.addEventListener('dragleave', _handleDragLeaveRight);
 
-    pdfFile.addEventListener('change', _handleDrop);
+    Array.from(PDF.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftMain));
+    Array.from(FIELDS.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchRightMain));
+    Array.from(LEFT.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchLeftSub));
+    Array.from(RIGHT.tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitchRightSub));
+
+    LEFT.pdfFile.addEventListener('change', _handleDropLeft);
+    RIGHT.pdfFile.addEventListener('change', _handleDropRight);
   };
 
   const removeHandler = () => {
-    dropZone.removeEventListener('drop', _handleDrop);
-    dropZone.removeEventListener('dragover', _handleDragOver);
-    dropZone.removeEventListener('dragleave', _handleDragLeave);
+    LEFT.dropZone.removeEventListener('drop', _handleDropLeft);
+    LEFT.dropZone.removeEventListener('dragover', _handleDragOverLeft);
+    LEFT.dropZone.removeEventListener('dragleave', _handleDragLeaveLeft);
 
-    Array.from(tablinks).forEach((tablink) => tablink.addEventListener('click', _handleTabSwitch));
+    RIGHT.dropZone.removeEventListener('drop', _handleDropRight);
+    RIGHT.dropZone.removeEventListener('dragover', _handleDragOverRight);
+    RIGHT.dropZone.removeEventListener('dragleave', _handleDragLeaveRight);
 
-    pdfFile.removeEventListener('change', _handleDrop);
+    Array.from(PDF.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchLeftMain));
+    Array.from(FIELDS.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchRightMain));
+    Array.from(LEFT.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchLeftSub));
+    Array.from(RIGHT.tablinks).forEach((tablink) => tablink.removeEventListener('click', _handleTabSwitchRightSub));
+
+    LEFT.pdfFile.removeEventListener('change', _handleDropLeft);
+    RIGHT.pdfFile.removeEventListener('change', _handleDropRight);
   };
 
   initHandler();
   window.addEventListener('beforeunload', removeHandler);
+  document.getElementById('defaultOpenTabPdfs').click();
+  document.getElementById('defaultOpenTabFields').click();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js');
   }
-})();
+})(utils, renderer);

@@ -27,33 +27,141 @@
 
     <main>
       <section class="left">
-        <div class="dropzone" id="dropZone">
-          <div class="active" id="dropzoneInfo">
-            <input type="file" name="pdf" id="pdfFile" hidden />
-            <label for="pdfFile">PDF Dokument hier ablegen oder klicken...</label>
+        <div class="pdf-tabs">
+          <!-- pdf tabs -->
+          <div class="tab">
+            <button
+              class="tablinks-pdfs selected"
+              id="defaultOpenTabPdfs"
+              data-tabs="leftPdfSelection,leftFieldSelection"
+              data-links="tablinks-pdfs::0,tablinks-fields::0"
+            >
+              Links
+            </button>
+            <button
+              class="tablinks-pdfs"
+              data-tabs="rightPdfSelection,rightFieldSelection"
+              data-links="tablinks-pdfs::1,tablinks-fields::1"
+            >
+              Rechts
+            </button>
           </div>
-          <div class="hidden" id="dropzoneFile">
-            <div class="name-viewer_container">
-              <span class="filename" id="dropzoneFileName"></span>
-              <div class="viewer-container" id="viewerContainer">
-                <div id="viewer" class="pdfViewer"></div>
+          <!-- pdf tabs content -->
+          <!-- pdf tab content left -->
+          <div class="tabcontent-pdfs" id="leftPdfSelection">
+            <!-- dropzone left pdf -->
+            <div class="dropzone" id="dropZoneLeftPdf">
+              <div class="active" id="dropzoneInfoLeftPdf">
+                <input type="file" name="pdf" id="fileLeftPdf" hidden />
+                <label for="fileLeftPdf">PDF Dokument hier ablegen oder klicken...</label>
+              </div>
+              <div class="hidden" id="dropzoneFileLeftPdf">
+                <div class="name-viewer_container">
+                  <span class="filename" id="dropzoneFileNameLeftPdf"></span>
+                  <div class="viewer-container" id="viewerContainerLeftPdf">
+                    <div class="pdfViewer" id="viewerLeftPdf"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- pdf tab content right -->
+          <div class="tabcontent-pdfs" id="rightPdfSelection">
+            <!-- dropzone right pdf -->
+            <div class="dropzone" id="dropZoneRightPdf">
+              <div class="active" id="dropzoneInfoRightPdf">
+                <input type="file" name="pdf" id="fileRightPdf" hidden />
+                <label for="fileRightPdf">PDF Dokument hier ablegen oder klicken...</label>
+              </div>
+              <div class="hidden" id="dropzoneFileRightPdf">
+                <div class="name-viewer_container">
+                  <span class="filename" id="dropzoneFileNameRightPdf"></span>
+                  <div class="viewer-container" id="viewerContainerRightPdf">
+                    <div class="pdfViewer" id="viewerRightPdf"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
       <section class="right">
-        <div class="formfields">
-          <div class="active formfields_no-entries" id="formFieldsNoEntries">
-            <p>Keine Daten vorhanden...</p>
+        <div class="pdf-tabs">
+          <!-- field tabs -->
+          <div class="tab">
+            <button
+              class="tablinks-fields selected"
+              id="defaultOpenTabFields"
+              data-tabs="leftPdfSelection,leftFieldSelection"
+              data-links="tablinks-pdfs::0,tablinks-fields::0"
+            >
+              Links
+            </button>
+            <button
+              class="tablinks-fields"
+              data-tabs="rightPdfSelection,rightFieldSelection"
+              data-links="tablinks-pdfs::1,tablinks-fields::1"
+            >
+              Rechts
+            </button>
+            <button class="tablinks-fields" data-tabs="diffFieldSelection" data-links="tablinks-fields::2">
+              Unterschied
+            </button>
           </div>
-          <div class="hidden formfields_entries" id="formFieldsContainer">
-            <div class="tab">
-              <button class="tablinks selected" id="defaultOpen" data-tab="simplifiedFormFields">Formfelder</button>
-              <button class="tablinks" data-tab="rawFormFields">Rohdaten</button>
+          <!-- field tabs content -->
+          <!-- field tab content left -->
+          <div class="tabcontent-fields" id="leftFieldSelection">
+            <div class="formfields">
+              <div class="active formfields_no-entries" id="formFieldsNoEntriesLeftPdf">
+                <p>Keine Daten vorhanden...</p>
+              </div>
+              <!-- fields left pdf -->
+              <div class="hidden formfields_entries" id="formFieldsContainerLeftPdf">
+                <div class="tab">
+                  <button
+                    class="tablinks-pdf_left selected"
+                    id="defaultOpenTabFieldsLeft"
+                    data-tab="simplifiedFormFieldsLeftPdf"
+                  >
+                    Formfelder
+                  </button>
+                  <button class="tablinks-pdf_left" data-tab="rawFormFieldsLeftPdf">Rohdaten</button>
+                </div>
+                <div class="tabcontent-pdf_left" id="simplifiedFormFieldsLeftPdf"></div>
+                <div class="tabcontent-pdf_left" id="rawFormFieldsLeftPdf"></div>
+              </div>
             </div>
-            <div class="tabcontent" id="simplifiedFormFields"></div>
-            <div class="tabcontent" id="rawFormFields"></div>
+          </div>
+          <!-- field tab content right -->
+          <div class="tabcontent-fields" id="rightFieldSelection">
+            <div class="formfields">
+              <div class="active formfields_no-entries" id="formFieldsNoEntriesRightPdf">
+                <p>Keine Daten vorhanden...</p>
+              </div>
+              <!-- fields left pdf -->
+              <div class="hidden formfields_entries" id="formFieldsContainerRightPdf">
+                <div class="tab">
+                  <button
+                    class="tablinks-pdf_right selected"
+                    id="defaultOpenTabFieldsRight"
+                    data-tab="simplifiedFormFieldsRightPdf"
+                  >
+                    Formfelder
+                  </button>
+                  <button class="tablinks-pdf_right" data-tab="rawFormFieldsRightPdf">Rohdaten</button>
+                </div>
+                <div class="tabcontent-pdf_right" id="simplifiedFormFieldsRightPdf"></div>
+                <div class="tabcontent-pdf_right" id="rawFormFieldsRightPdf"></div>
+              </div>
+            </div>
+          </div>
+          <!-- field tab content diff -->
+          <div class="tabcontent-fields" id="diffFieldSelection">
+            <div class="formfields">
+              <div class="tabcontent-diff">
+                <div id="diffingContainer"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -73,6 +181,9 @@
 
     <script src="public/libs/pdfjs/build/pdf.min.js"></script>
     <script src="public/libs/pdfjs/web/pdf_viewer.js"></script>
+    <script src="public/libs/jsdiff/diff.js"></script>
+    <script src="public/src/renderer.js"></script>
+    <script src="public/src/utils.js"></script>
     <script src="public/src/main.js"></script>
   </body>
 </html>

@@ -45,8 +45,8 @@ main .left .dropzone {
   align-items: center;
   justify-content: center;
 
-  width: calc(100vw / 2 - 36px);
-  height: calc(100vh - 60px - 48px - 16px);
+  width: calc(100vw / 2 - 28px);
+  height: calc(100vh - 60px - 48px - 16px - 55px);
 
   border: 2px blue dashed;
   border-radius: 4px;
@@ -67,18 +67,19 @@ main .left .name-viewer_container {
 }
 
 main .left .name-viewer_container .filename {
-  margin-bottom: 18px;
+  margin-top: 8px;
+  margin-bottom: 6px;
 }
 
 main .left .viewer-container {
-  width: calc(100vw / 2 - 80px);
-  height: calc(100vh - 60px - 48px - 100px);
+  width: calc(100vw / 2 - 60px);
+  height: calc(100vh - 60px - 48px - 100px - 16px);
   overflow: auto;
 }
 
 main .right .formfields {
-  width: calc(100vw / 2 - 36px);
-  height: calc(100vh - 60px - 48px - 19px);
+  width: calc(100vw / 2 - 28px);
+  height: calc(100vh - 60px - 48px - 48px - 23px);
 
   border: 2px lightslategray solid;
   border-radius: 4px;
@@ -93,6 +94,8 @@ main .right .formfields .formfields_no-entries {
   height: inherit;
 }
 
+main .left .pdf-tabs,
+main .right .pdf-tabs,
 main .right .formfields .formfields_entries {
   display: flex;
   flex-direction: column;
@@ -128,14 +131,30 @@ main .right .formfields .formfields_entries {
   background: #b1cae2 !important;
 }
 
-.tabcontent {
-  display: none;
+.tabcontent-pdfs,
+.tabcontent-fields,
+.tabcontent-pdfs-fields,
+.tabcontent-pdf_left,
+.tabcontent-pdf_right,
+.tabcontent-diff {
   overflow: auto;
   height: inherit;
   width: calc(100vw / 2 - 60px);
 
   padding: 6px 12px;
   border-top: 1px solid #ccc;
+}
+
+.tabcontent-pdfs,
+.tabcontent-fields,
+.tabcontent-pdfs-fields {
+  width: calc(100vw / 2 - 24px);
+  padding: 6px 0 0 0;
+}
+
+.tabcontent-diff {
+  width: calc(100vw / 2 - 50px);
+  padding: 8px 12px 8px 8px;
 }
 
 ul {
