@@ -79,7 +79,7 @@ main .left .viewer-container {
 
 main .right .formfields {
   width: calc(100vw / 2 - 28px);
-  height: calc(100vh - 60px - 48px - 48px - 18px);
+  height: calc(100vh - 60px - 48px - 48px - 23px);
 
   border: 2px lightslategray solid;
   border-radius: 4px;
@@ -95,6 +95,7 @@ main .right .formfields .formfields_no-entries {
 }
 
 main .left .pdf-tabs,
+main .right .pdf-tabs,
 main .right .formfields .formfields_entries {
   display: flex;
   flex-direction: column;
@@ -134,8 +135,8 @@ main .right .formfields .formfields_entries {
 .tabcontent-fields,
 .tabcontent-pdfs-fields,
 .tabcontent-pdf_left,
-.tabcontent-pdf_right {
-  /* display: none; */
+.tabcontent-pdf_right,
+.tabcontent-diff {
   overflow: auto;
   height: inherit;
   width: calc(100vw / 2 - 60px);
@@ -146,7 +147,8 @@ main .right .formfields .formfields_entries {
 
 .tabcontent-pdfs,
 .tabcontent-fields,
-.tabcontent-pdfs-fields {
+.tabcontent-pdfs-fields,
+.tabcontent-diff {
   width: calc(100vw / 2 - 24px);
   padding: 6px 0 0 0;
 }

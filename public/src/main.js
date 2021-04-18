@@ -21,6 +21,8 @@
     tablinks: document.getElementsByClassName('tablinks-pdf_left'),
     simplifiedFormFields: document.getElementById('simplifiedFormFieldsLeftPdf'),
     rawFormFields: document.getElementById('rawFormFieldsLeftPdf'),
+    isNew: true,
+    formFields: {},
   };
 
   const RIGHT = {
@@ -35,21 +37,25 @@
     tablinks: document.getElementsByClassName('tablinks-pdf_right'),
     simplifiedFormFields: document.getElementById('simplifiedFormFieldsRightPdf'),
     rawFormFields: document.getElementById('rawFormFieldsRightPdf'),
+    isNew: true,
+    formFields: {},
   };
 
-  let isNewLeft = true;
-  let isNewRight = true;
+  const DIFF = {
+    container: document.getElementById('diffingContainer'),
+    performDiffing: document.getElementById('btnPerformDiffing'),
+  };
 
   /**
    * DROPZONE
    */
 
   const _toggleDropzoneLeft = () => {
-    if (!isNewLeft) {
+    if (!LEFT.isNew) {
       return;
     }
 
-    isNewLeft = !isNewLeft;
+    LEFT.isNew = !LEFT.isNew;
 
     LEFT.dropzoneInfo.classList.toggle('active');
     LEFT.dropzoneInfo.classList.toggle('hidden');
@@ -70,7 +76,12 @@
   const _handleDropLeft = (ev) => {
     ev.preventDefault();
 
-    UTILS.clearList([UTILS.CONSTANTS.LEFT.formFieldList, UTILS.CONSTANTS.LEFT.rawFieldList]);
+    UTILS.clearList([
+      UTILS.CONSTANTS.LEFT.formFieldList,
+      UTILS.CONSTANTS.LEFT.rawFieldList,
+      UTILS.CONSTANTS.DIFF.container,
+    ]);
+    LEFT.formFields = {};
 
     const droppedFile = UTILS.getPdfFile(ev);
 
@@ -82,6 +93,7 @@
       const typedarray = new Uint8Array(this.result);
       const pdf = await pdfjsLib.getDocument(typedarray).promise;
       const formFields = await UTILS.getPdfContent(pdf, pdf.numPages);
+      LEFT.formFields = formFields;
       RENDERER.fields(formFields, UTILS.CONSTANTS.LEFT.formFieldList, LEFT.simplifiedFormFields);
       RENDERER.raw(formFields, UTILS.CONSTANTS.LEFT.rawFieldList, LEFT.rawFormFields);
       // RENDERER.viewer(pdf, UTILS.CONSTANTS.LEFT.viewer);
@@ -102,11 +114,11 @@
   };
 
   const _toggleDropzoneRight = () => {
-    if (!isNewRight) {
+    if (!RIGHT.isNew) {
       return;
     }
 
-    isNewRight = !isNewRight;
+    RIGHT.isNew = !RIGHT.isNew;
 
     RIGHT.dropzoneInfo.classList.toggle('active');
     RIGHT.dropzoneInfo.classList.toggle('hidden');
@@ -127,7 +139,12 @@
   const _handleDropRight = (ev) => {
     ev.preventDefault();
 
-    UTILS.clearList([UTILS.CONSTANTS.RIGHT.formFieldList, UTILS.CONSTANTS.RIGHT.rawFieldList]);
+    UTILS.clearList([
+      UTILS.CONSTANTS.RIGHT.formFieldList,
+      UTILS.CONSTANTS.RIGHT.rawFieldList,
+      UTILS.CONSTANTS.DIFF.container,
+    ]);
+    RIGHT.formFields = {};
 
     const droppedFile = UTILS.getPdfFile(ev);
 
@@ -139,6 +156,7 @@
       const typedarray = new Uint8Array(this.result);
       const pdf = await pdfjsLib.getDocument(typedarray).promise;
       const formFields = await UTILS.getPdfContent(pdf, pdf.numPages);
+      RIGHT.formFields = formFields;
       RENDERER.fields(formFields, UTILS.CONSTANTS.RIGHT.formFieldList, RIGHT.simplifiedFormFields);
       RENDERER.raw(formFields, UTILS.CONSTANTS.RIGHT.rawFieldList, RIGHT.rawFormFields);
       // RENDERER.viewer(pdf, UTILS.CONSTANTS.RIGHT.viewer);
@@ -247,6 +265,29 @@
   };
 
   /**
+   * DIFFING
+   */
+
+  const _handleDiffing = () => {
+    const holder = document.createElement('div');
+    holder.id = UTILS.CONSTANTS.DIFF.container;
+
+    const left = UTILS.removeRaw(LEFT.formFields);
+    const right = UTILS.removeRaw(RIGHT.formFields);
+    const result = Diff.diffJson(left, right);
+
+    result.forEach((part) => {
+      const color = part.added ? 'green' : part.removed ? 'red' : 'grey';
+      const span = document.createElement('span');
+      span.style.color = color;
+      span.appendChild(document.createTextNode(part.value));
+      holder.appendChild(span);
+    });
+
+    DIFF.container.appendChild(holder);
+  };
+
+  /**
    * SETUP
    */
 
@@ -268,6 +309,7 @@
 
     LEFT.pdfFile.addEventListener('change', _handleDropLeft);
     RIGHT.pdfFile.addEventListener('change', _handleDropRight);
+    DIFF.performDiffing.addEventListener('click', _handleDiffing);
   };
 
   const removeHandler = () => {
@@ -286,6 +328,7 @@
 
     LEFT.pdfFile.removeEventListener('change', _handleDropLeft);
     RIGHT.pdfFile.removeEventListener('change', _handleDropRight);
+    DIFF.performDiffing.removeEventListener('click', _handleDiffing);
   };
 
   initHandler();

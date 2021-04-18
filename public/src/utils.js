@@ -10,6 +10,9 @@ const utils = (() => {
       rawFieldList: 'rawFieldListRightPdf',
       viewer: 'viewerContainerRightPdf',
     },
+    DIFF: {
+      container: 'diffingContainerResult',
+    },
   };
 
   const _extractValue = (annotation) => {
@@ -75,10 +78,17 @@ const utils = (() => {
     }
   };
 
+  const _removeRaw = (fields) => {
+    const copiedFields = JSON.parse(JSON.stringify(fields));
+    Object.values(copiedFields).forEach((entry) => delete entry.raw);
+    return copiedFields;
+  };
+
   return {
     CONSTANTS: _CONSTANTS,
     getPdfFile: _getPdfFile,
     getPdfContent: _getPdfContent,
     clearList: _clearList,
+    removeRaw: _removeRaw,
   };
 })();
