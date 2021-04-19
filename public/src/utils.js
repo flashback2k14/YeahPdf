@@ -79,14 +79,18 @@ const utils = (() => {
     }
   };
 
+  const _isEmpty = (obj) => {
+    return Object.keys(obj).length === 0;
+  };
+
   const _removeRaw = (fields) => {
+    if (_isEmpty(fields)) {
+      return {};
+    }
+
     const copiedFields = JSON.parse(JSON.stringify(fields));
     Object.values(copiedFields).forEach((entry) => delete entry.raw);
     return copiedFields;
-  };
-
-  const _isEmpty = (obj) => {
-    return Object.keys(obj).length === 0;
   };
 
   return {

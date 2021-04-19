@@ -43,6 +43,7 @@
 
   const DIFF = {
     container: document.getElementById('diffingContainer'),
+    isNew: true,
   };
 
   /**
@@ -81,6 +82,7 @@
       UTILS.CONSTANTS.DIFF.container,
     ]);
     LEFT.formFields = {};
+    DIFF.isNew = true;
 
     const droppedFile = UTILS.getPdfFile(ev);
 
@@ -144,6 +146,7 @@
       UTILS.CONSTANTS.DIFF.container,
     ]);
     RIGHT.formFields = {};
+    DIFF.isNew = true;
 
     const droppedFile = UTILS.getPdfFile(ev);
 
@@ -271,15 +274,22 @@
    */
 
   const _handleDiffing = () => {
-    const holder = document.createElement('div');
-    holder.id = UTILS.CONSTANTS.DIFF.container;
+    if (!DIFF.isNew) {
+      return;
+    }
 
     const left = UTILS.removeRaw(LEFT.formFields);
     const right = UTILS.removeRaw(RIGHT.formFields);
 
     if (UTILS.isEmpty(left) || UTILS.isEmpty(right)) {
+      DIFF.isNew = true;
       return;
     }
+
+    DIFF.isNew = !DIFF.isNew;
+
+    const holder = document.createElement('div');
+    holder.id = UTILS.CONSTANTS.DIFF.container;
 
     const result = Diff.diffJson(left, right);
 
