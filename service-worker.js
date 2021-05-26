@@ -1,4 +1,4 @@
-const version = '2.0.1';
+const version = '2.1.0';
 const cacheName = `yeah-pdf-${version}`;
 
 self.addEventListener('install', (e) => {

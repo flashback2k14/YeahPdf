@@ -160,6 +160,11 @@ main .right .formfields .formfields_entries {
   padding: 8px 12px 8px 8px;
 }
 
+.diffing-result_text {
+  font-weight: 900;
+  font-size: large;
+}
+
 ul {
   padding-bottom: 4px;
 }

@@ -42,6 +42,7 @@
   };
 
   const DIFF = {
+    resultText: document.getElementById('diffingResultText'),
     container: document.getElementById('diffingContainer'),
     isNew: true,
   };
@@ -291,6 +292,8 @@
     const holder = document.createElement('div');
     holder.id = UTILS.CONSTANTS.DIFF.container;
 
+    const colorHolder = [];
+
     const result = Diff.diffJson(left, right);
 
     result.forEach((part) => {
@@ -299,8 +302,13 @@
       span.style.color = color;
       span.appendChild(document.createTextNode(part.value));
       holder.appendChild(span);
+      colorHolder.push(color);
     });
 
+    DIFF.resultText.innerText =
+      colorHolder.findIndex((color) => color === 'red' || color === 'green') !== -1
+        ? "Die verglichenen PDF's weisen Unterschiede auf (siehe Details)."
+        : "Die verglichenen PDF's weisen keine Unterschiede auf (siehe Details).";
     DIFF.container.appendChild(holder);
   };
 
